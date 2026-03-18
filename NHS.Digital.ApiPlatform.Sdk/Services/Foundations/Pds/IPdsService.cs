@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using NHS.Digital.ApiPlatform.Sdk.Models.Foundations.Patients;
 
 namespace NHS.Digital.ApiPlatform.Sdk.Services.Foundations.Pds
 {
@@ -13,10 +14,7 @@ namespace NHS.Digital.ApiPlatform.Sdk.Services.Foundations.Pds
     {
         ValueTask<string> SearchPatientsAsync(
             string accessToken,
-            string family,
-            IEnumerable<string>? given = null,
-            string? gender = null,
-            DateOnly? birthdate = null,
+            Patient patient,
             CancellationToken cancellationToken = default);
     }
 }

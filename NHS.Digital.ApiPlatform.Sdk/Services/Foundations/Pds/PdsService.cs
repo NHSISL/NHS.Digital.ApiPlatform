@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using NHS.Digital.ApiPlatform.Sdk.Brokers.Https;
 using NHS.Digital.ApiPlatform.Sdk.Brokers.Identifiers;
 using NHS.Digital.ApiPlatform.Sdk.Models.Configurations;
+using NHS.Digital.ApiPlatform.Sdk.Models.Foundations.Patients;
 
 namespace NHS.Digital.ApiPlatform.Sdk.Services.Foundations.Pds
 {
@@ -32,33 +33,39 @@ namespace NHS.Digital.ApiPlatform.Sdk.Services.Foundations.Pds
         }
 
         public ValueTask<string> SearchPatientsAsync(
-            string accessToken,
-            string family,
-            IEnumerable<string> given = null,
-            string gender = null,
-            DateOnly? birthdate = null,
-            CancellationToken cancellationToken = default) =>
+			string accessToken,
+			Patient patient,
+			CancellationToken cancellationToken = default) =>
         TryCatch(async () =>
         {
             string baseUrl = this.configurations.PersonalDemographicsService.BaseUrl.TrimEnd('/');
-            string url = $"{baseUrl}/Patient?family={Uri.EscapeDataString(family)}";
+            string url;
 
-            if (given is not null)
+            if (!string.IsNullOrWhiteSpace(patient.NhsNumber))
             {
-                foreach (string givenName in given.Where(n => !string.IsNullOrWhiteSpace(n)))
+                url = $"{baseUrl}/Patient/{patient.NhsNumber}";
+            }
+            else
+            {
+                url = $"{baseUrl}/Patient?family={Uri.EscapeDataString(patient.Surname)}";
+
+                if (patient.GivenName is not null)
+            {
+                foreach (string givenName in patient.GivenName.Where(n => !string.IsNullOrWhiteSpace(n)))
                 {
                     url += $"&given={Uri.EscapeDataString(givenName)}";
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(gender) is false)
+            if (!string.IsNullOrWhiteSpace(patient.Gender))
             {
-                url += $"&gender={Uri.EscapeDataString(gender)}";
+                url += $"&gender={Uri.EscapeDataString(patient.Gender)}";
             }
 
-            if (birthdate is not null)
-            {
-                url += $"&birthdate=eq{birthdate:yyyy-MM-dd}";
+                if (patient.DateOfBirth != default)
+                {
+                    url += $"&birthdate=eq{patient.DateOfBirth:yyyy-MM-dd}";
+                }
             }
 
             var response = await this.httpBroker.GetAsync(

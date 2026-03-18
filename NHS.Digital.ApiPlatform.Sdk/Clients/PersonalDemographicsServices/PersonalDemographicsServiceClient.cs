@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NHS.Digital.ApiPlatform.Sdk.Models.Clients.Pds.Exceptions;
+using NHS.Digital.ApiPlatform.Sdk.Models.Foundations.Patients;
 using NHS.Digital.ApiPlatform.Sdk.Models.Orchestrations.Pds.Exceptions;
 using NHS.Digital.ApiPlatform.Sdk.Services.Orchestrations.Pds;
 using Xeptions;
@@ -21,19 +22,13 @@ namespace NHS.Digital.ApiPlatform.Sdk.Clients.PersonalDemographicsServices
             this.pdsOrchestrationService = pdsOrchestrationService;
 
         public async ValueTask<string> SearchPatientsAsync(
-            string family,
-            IEnumerable<string> given = null,
-            string gender = null,
-            DateOnly? birthdate = null,
+            Patient patient,
             CancellationToken cancellationToken = default)
         {
             try
             {
                 return await this.pdsOrchestrationService.SearchPatientsAsync(
-                    family,
-                    given,
-                    gender,
-                    birthdate,
+                    patient,
                     cancellationToken);
             }
             catch (PdsOrchestrationValidationException pdsOrchestrationValidationException)
