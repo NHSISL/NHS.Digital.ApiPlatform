@@ -82,7 +82,7 @@ public class AuthController : ControllerBase
         HttpContext.Session.Clear();
         await HttpContext.SignOutAsync("bff-cookie");
 
-        return Redirect(@"");
+        return Redirect(@"\");
     }
 
     [HttpGet("callback")]

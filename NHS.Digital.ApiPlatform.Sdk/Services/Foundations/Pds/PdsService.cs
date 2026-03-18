@@ -22,11 +22,11 @@ namespace NHS.Digital.ApiPlatform.Sdk.Services.Foundations.Pds
         private readonly IIdentifierBroker identifierBroker;
 
         public PdsService(
-            IOptions<ApiPlatformConfigurations> configurations,
+            ApiPlatformConfigurations configurations,
             IHttpBroker httpBroker,
             IIdentifierBroker identifierBroker)
         {
-            this.configurations = configurations.Value;
+            this.configurations = configurations;
             this.httpBroker = httpBroker;
             this.identifierBroker = identifierBroker;
         }
