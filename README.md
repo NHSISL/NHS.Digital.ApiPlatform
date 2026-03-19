@@ -1,3 +1,5 @@
+![NHS Digital API Platform SDK](Resources/Images/NhsDigitalBanner.png)
+
 # NHS Digital API Platform SDK
 
 This repository provides a SDK for integrating with the
