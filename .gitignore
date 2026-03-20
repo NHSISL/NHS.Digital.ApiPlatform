@@ -417,3 +417,5 @@ FodyWeavers.xsd
 *.msm
 *.msp
 /ReactApp1.Server/appsettings.Development.json
+/reactapp1.client/
+/ReactApp1.Server/
